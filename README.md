@@ -2,6 +2,10 @@
 
 Simple way (unique PHP file) to store your encrypted data in a single text file, not using database at all and encrypting from the client side using javascript AES algorithms 
 
+## Screenshot
+
+![first access window](/screenshot.jpg?raw=true "First access window")
+
 ## Start the project
 
 Copy this project in any PHP 5 server and call it from browser. Default encryption key "1234". Each time you decrypt, you can change key and re-encrypt and save. 
