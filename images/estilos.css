@@ -1,15 +1,17 @@
 html{height:100%;}
 html,body{margin:0px; padding:0px;}
-body, #key{
-	font-family:sans-serif,verdana,arial;
-	font-size:11px;
-        
+body, * {
+	font-family:monospace, sans-serif,verdana,arial;
 }
 body{
+    font-size:100%;
     background-color: #007998;
     background: linear-gradient(135deg, #007998 0%, #002233 100%) repeat scroll 0% 0% transparent;
 }
 * { border-radius: 5px;}
+
+input, textarea, select {font-size:1rem;}
+
 .tb_main{
 	margin:15px auto;
 	width:600px;
@@ -21,8 +23,7 @@ body{
 }
 .a_bt{
 	text-decoration:none;
-	display:block;
-	float:left;
+	display:inline-block;
 	padding:5px;
 	margin:3px;
 	background-color:#333;
@@ -30,34 +31,51 @@ body{
         font-weight:bold;
         letter-spacing:1px;
         border: 1px #666 solid;
+        border-left: 3px #666 solid;
+        border-right: 3px #666 solid;
         outline:0;
 }
+.key:focus,
+.a_bt:focus,
 .a_bt:hover{
         border: 1px #aaa solid;
+        border-left: 3px #aaa solid;
+        border-right: 3px #aaa solid;
         box-shadow: 0px 0px 3px #ccc;
         color:#fff;
 }
 #txa{
 	text-align:left;
-	width:600px;
+	width:42rem;
 	height:300px;
 	background-color:#333;
-        color:#ccc;
+        color:#666;
 	padding:5px;
 	margin:0px;
 	border:none;
 }
-#key{
-	float:left;
+
+.txa_decrypted{
+    background-image: 
+    linear-gradient(90deg, transparent 69px, #888 69px, #357 71px, transparent 71px),
+    linear-gradient(#444 .1em, transparent .1em);
+    background-size: 100% 1.187em;
+    padding-left: 90px!important;
+    color:#ccc!important;
+}
+
+.key{
 	padding:5px;
 	margin:3px;
 	background-color:#333;
         color:#ccc;
-	border:none;
-	width:300px;
+	border:1px #000 solid;
+	border-left:3px #000 solid;
+	border-right:3px #000 solid;
+	width:400px;
         text-align:center;
 }
-#key:hover{box-shadow: 0px 0px 3px #ccc;}
+.key:hover{box-shadow: 0px 0px 3px #ccc;}
 
 #signature{text-align:center;color:rgba(255,255,255,0.5);}
 #signature a{color:rgba(255,255,255,0.5);text-decoration:none; font-weight:bold;}
@@ -71,3 +89,5 @@ body{
 }
 #messages_div span.red{ color:#b99;}
 #messages_div span.green{ color:#9b9;}
+
+#menu_change_key{text-align:right;}

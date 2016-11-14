@@ -20,7 +20,7 @@
  */ ?>
 <?php 
 
-$version = '1.0';
+$version = '1.1';
 
 if (isset($_POST['op']) and $_POST['op']=='save'){
 
@@ -499,10 +499,24 @@ function setKey(){
 <input type='hidden' id='op' name='op' value='save' />
 <table class='tb_main' cellpadding='0' cellspacing='0'>
     <tr>
-        <td>
-            <input type='password' id='key' value='' placeholder=" * * * write your encryption key here * * * " />
-            <a href='#' class='a_bt' id='bt_encrypt' onclick='javascript:js_decrypt();'>Decrypt</a>
-            <a href='#' class='a_bt' id='bt_save' onclick='javascript:js_save();'>Save</a>
+        <td style='color:#fff;'>
+            <div id="menu_encrypted">
+                <input type='password' id='key' value='' placeholder=" *** write your encryption key here *** " class="key" />
+                <a href='#' class='a_bt' id='bt_decrypt' onclick='js_decrypt();'>Decrypt</a>
+            </div>
+            <div id="menu_decrypted" style="display:none;">
+                <a href='#' class='a_bt' id='bt_close' onclick='js_close();'>Close</a>
+                <a href='#' class='a_bt' id='bt_save' onclick='js_save();'>Save</a>
+                <a href='#' class='a_bt' id='bt_change' onclick='js_change();'>Change key</a>
+            </div>
+            <div id="menu_change_key" style="display:none;">
+                 New key: <input type='password' id='key1' value='' placeholder=" *** write your encryption key here *** " class="key" />
+                <br />
+                Confirm new key: <input type='password' id='key2' value='' placeholder=" *** write your encryption key here *** " class="key" />
+                <br />
+                <a href='#' class='a_bt' id='bt_save_change' onclick='js_save_change();'>Save with new key</a>
+                <a href='#' class='a_bt' id='bt_close' onclick='js_cancel_change_key();'>Cancel</a>
+            </div>
         </td>
     </tr>
     <tr>
@@ -539,33 +553,80 @@ var data_state = 'encrypted';
 var obj_messages_div=document.getElementById('messages_div');
 function js_decrypt(){
 	if (document.getElementById('key').value=='') alert('The encryption key can not be empty.');
-	if (data_state == 'encrypted'){
-		document.getElementById('txa').value = Decrypt_text();
-		if (error_msg==0){
-			obj_messages_div.innerHTML = '<span class=\'green\'><b>Decryption</b> performed successfully.</span>';
-			document.getElementById('bt_encrypt').innerHTML = 'Encrypt';
-			data_state = 'decrypted';
-		}else{
-			obj_messages_div.innerHTML = '<span class=\'red\'><b>Wrong encryption key</b>. Try again.</span>';
-		}
-	}else{
-		var coded = Encrypt_text(); 
-		//document.getElementById('txa').value = eval("String.fromCharCode(" + coded + ")");
-		document.getElementById('txa').value = coded;
-		document.getElementById('bt_encrypt').innerHTML = 'Decrypt';
-		obj_messages_div.innerHTML = '<span class=\'green\'><b>Encryption</b> performed successfully.</span>';
-		data_state = 'encrypted';
-	}
+        document.getElementById('txa').value = Decrypt_text();
+        if (error_msg==0){
+                obj_messages_div.innerHTML = '<span class=\'green\'><b>Decryption</b> performed successfully.</span>';
+                document.getElementById('menu_encrypted').style.display = "none";
+                document.getElementById('menu_decrypted').style.display = "inline-block";
+                document.getElementById('txa').className = 'txa_decrypted';
+                document.getElementById('txa').focus();
+                data_state = 'decrypted';
+        }else{
+                obj_messages_div.innerHTML = '<span class=\'red\'><b>Wrong encryption key</b>. Try again.</span>';
+                document.getElementById('key').focus();
+        }
+}
 
+function js_close(){
+        var coded = Encrypt_text(); 
+        document.getElementById('txa').value = coded;
+        document.getElementById('txa').className = '';
+        obj_messages_div.innerHTML = '<span class=\'green\'>Content successfully <b>encrypted</b> again.</span>';
+        data_state = 'encrypted';
+        document.getElementById('menu_change_key').style.display = "none";
+        document.getElementById('menu_decrypted').style.display = "none";
+        document.getElementById('menu_encrypted').style.display = "inline-block";
+        document.getElementById('key').value = '';
+        document.getElementById('key').focus();
 }
 
 function js_save(){
-	if (data_state == 'encrypted'){
-		document.getElementById('form1').submit();
-	}else{
-		alert('To save, you must encrypt the text first.');
-	}
+        var coded = Encrypt_text(); 
+        document.getElementById('txa').value = coded;
+        document.getElementById('txa').className = '';
+        obj_messages_div.innerHTML = '<span class=\'green\'><b>Encryption</b> performed successfully.</span>';
+        data_state = 'encrypted';
+        document.getElementById('form1').submit();
 }
+
+function js_change(){
+    document.getElementById('menu_encrypted').style.display = "none";
+    document.getElementById('menu_decrypted').style.display = "none";
+    document.getElementById('menu_change_key').style.display = "inline-block";
+    document.getElementById('key1').focus();
+}
+
+function js_cancel_change_key(){
+    document.getElementById('menu_encrypted').style.display = "none";
+    document.getElementById('menu_decrypted').style.display = "inline-block";
+    document.getElementById('menu_change_key').style.display = "none";
+}
+
+
+function js_save_change(){
+    var key1 = document.getElementById('key1').value;
+    var key2 = document.getElementById('key2').value;
+    
+    if (key1=='') return;
+    
+    if (key1 != key2){
+        alert("Please rewrite both keys because they don't match.");
+        document.getElementById('key1').value = '';
+        document.getElementById('key2').value = '';
+        document.getElementById('key1').focus();
+        return;
+    }
+    
+    document.getElementById('key').value = key1;
+    js_save();
+}
+
+/* = put cursor/focus on the #key box = */
+    document.getElementById('key').focus();
+
+/* = adjust the height of main wrapper to the window height = */
+    var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    document.getElementById('txa').style.height = (parseInt(h,10) - 250) + 'px';
 
 </script>
 </body>

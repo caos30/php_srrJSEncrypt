@@ -1,10 +1,10 @@
 # [php_srrJSEncrypt](https://github.com/caos30/php_srrJSEncrypt)
 
-Simple way (unique PHP file) to store your encrypted data in a single text file, not using database at all and encrypting from the client side using javascript AES algorithms 
+Simple way (unique PHP file) to store your encrypted data in a single text file, not using database at all and encrypting from the client side using javascript AES algorithms. 
 
 ## Screenshot
 
-![first access window](/screenshot.jpg?raw=true "First access window")
+![first access window](/screenshot.png?raw=true "First access window")
 
 ## Start the project
 
