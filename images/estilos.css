@@ -61,6 +61,7 @@ input, textarea, select {font-size:1rem;}
     linear-gradient(#444 .1em, transparent .1em);
     background-size: 100% 1.187em;
     padding-left: 90px!important;
+    padding-top: 0.46rem !important;
     color:#ccc!important;
 }
 
