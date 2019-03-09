@@ -12,6 +12,9 @@ body{
 
 input, textarea, select {font-size:1rem;}
 
+.a_c{text-align: center;}
+.n_w{white-space: nowrap;}
+
 .tb_main{
 	margin:15px auto;
 	width:600px;
@@ -57,7 +60,7 @@ input, textarea, select {font-size:1rem;}
 }
 
 .txa_decrypted{
-    background-image: 
+    background-image:
     linear-gradient(90deg, transparent 69px, #888 69px, #357 71px, transparent 71px),
     linear-gradient(#444 .1em, transparent .1em);
     background-size: 100% 1.3rem;
