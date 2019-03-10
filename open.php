@@ -20,9 +20,9 @@
  */
 
 // = set config
-	$version = '1.2';
+	$version = '2019.03.09';
 	$msg="";
-//echo var_export($_POST,true); die();
+
 // = data file
 	$file = !empty($_GET['file']) ? trim($_GET['file']) : ( !empty($_SESSION['file']) ? trim($_SESSION['file']) : '' );
 	$file = str_replace(array('.','/','\\'),'',$file);
@@ -537,6 +537,8 @@ function setKey(){
                 <a href='#' class='a_bt' id='bt_close' onclick='js_close();'>Close</a>
                 <a href='#' class='a_bt' id='bt_save' onclick='js_save();'>Save</a>
                 <a href='#' class='a_bt' id='bt_change' onclick='js_change();'>Change key</a>
+				<a href='#' class='a_bt' id='bt_edit' onclick='js_2FA_edit();' style='display:none;'>Edit</a>
+				<a href='#' class='a_bt' id='bt_regenerate' onclick='js_2FA_regenerate();' style='display:none;'>Regenerate</a>
             </div>
             <div id="menu_change_key" style="display:none;">
                  New key: <input type='password' id='key1' value='' placeholder=" *** write your encryption key here *** " class="key" />
@@ -550,6 +552,9 @@ function setKey(){
     </tr>
     <tr>
         <td>
+			<div id='totps' style='display:none;'>
+				<a href="#" data-sk="GHMXWADIUSUTXXAG" data-label="IM">IM: <b>123456</b></a>
+			</div>
             <textarea id='txa' name='txa'><?php
 
                     $ret="";
@@ -572,15 +577,16 @@ function setKey(){
     </tr>
 </table>
 </form>
-    <p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - v<?= $version ?></a> (C) 2015-2019 GPL v2 license</p>
+    <p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - <?= $version ?></a> (C) 2015-2019 GPL v2 license</p>
 
 
 
 
 <script>
 var data_state = 'encrypted';
-var obj_messages_div=document.getElementById('messages_div');
-function js_decrypt(){
+var obj_messages_div = document.getElementById('messages_div');
+var encrypted_data = document.getElementById('txa').value;
+function js_decrypt(b_edit){
 	if (document.getElementById('key').value=='') alert('The encryption key can not be empty.');
         document.getElementById('txa').value = Decrypt_text();
         if (error_msg==0){
@@ -590,6 +596,11 @@ function js_decrypt(){
                 document.getElementById('txa').className = 'txa_decrypted';
                 document.getElementById('txa').focus();
                 data_state = 'decrypted';
+				if (b_edit=='1'){
+					document.getElementById('totps').style = 'display:none;';
+				}else{
+					js_render_totps();
+				}
         }else{
                 obj_messages_div.innerHTML = '<span class=\'red\'><b>Wrong encryption key</b>. Try again.</span>';
                 document.getElementById('key').focus();
@@ -597,16 +608,21 @@ function js_decrypt(){
 }
 
 function js_close(){
-        var coded = Encrypt_text();
-        document.getElementById('txa').value = coded;
+		if (data_state === 'decrypted'){
+			var coded = Encrypt_text();
+	        document.getElementById('txa').value = coded;
+			encrypted_data = coded;
+			obj_messages_div.innerHTML = '<span class=\'green\'>Content successfully <b>encrypted</b> again.</span>';
+	        data_state = 'encrypted';
+		}
         document.getElementById('txa').className = '';
-        obj_messages_div.innerHTML = '<span class=\'green\'>Content successfully <b>encrypted</b> again.</span>';
-        data_state = 'encrypted';
         document.getElementById('menu_change_key').style.display = "none";
         document.getElementById('menu_decrypted').style.display = "none";
         document.getElementById('menu_encrypted').style.display = "inline-block";
         document.getElementById('key').value = '';
         document.getElementById('key').focus();
+		document.getElementById('totps').innerHTML = '';
+		document.getElementById('totps').style = 'display:none;';
 }
 
 function js_save(){
@@ -658,5 +674,127 @@ function js_save_change(){
     document.getElementById('txa').style.height = (parseInt(h,10) - 250) + 'px';
 
 </script>
+
+<!-- 2FA TOTP -->
+<script src="lib/jsSHA-master/sha.js"></script>
+<!--<script src="lib/totp.js"></script>-->
+<script>
+	TOTP = function() {
+
+	    var dec2hex = function(s) {
+	        return (s < 15.5 ? "0" : "") + Math.round(s).toString(16);
+	    };
+
+	    var hex2dec = function(s) {
+	        return parseInt(s, 16);
+	    };
+
+	    var leftpad = function(s, l, p) {
+	        if(l + 1 >= s.length) {
+	            s = Array(l + 1 - s.length).join(p) + s;
+	        }
+	        return s;
+	    };
+
+	    var base32tohex = function(base32) {
+	        var base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+	        var bits = "";
+	        var hex = "";
+	        for(var i = 0; i < base32.length; i++) {
+	            var val = base32chars.indexOf(base32.charAt(i).toUpperCase());
+	            bits += leftpad(val.toString(2), 5, '0');
+	        }
+	        for(var i = 0; i + 4 <= bits.length; i+=4) {
+	            var chunk = bits.substr(i, 4);
+	            hex = hex + parseInt(chunk, 2).toString(16) ;
+	        }
+	        return hex;
+	    };
+
+		this.getOTP = function(secret) {
+	        try {
+	            var epoch = Math.round(new Date().getTime() / 1000.0);
+	            var time = leftpad(dec2hex(Math.floor(epoch / 30)), 16, "0");
+
+				var shaObj = new jsSHA("SHA-1", "HEX");
+			    shaObj.setHMACKey(base32tohex(secret), "HEX");
+			    shaObj.update(time);
+			    var hmac = shaObj.getHMAC("HEX");
+
+	            var offset = hex2dec(hmac.substring(hmac.length - 1));
+	            var otp = (hex2dec(hmac.substr(offset * 2, 8)) & hex2dec("7fffffff")) + "";
+	            otp = (otp).substr(otp.length - 6, 6);
+
+	        } catch (error) {
+	            throw error;
+	        }
+	        return otp;
+	    };
+
+	}
+
+	function js_refresh_totps(){
+		var totpsChildren = document.getElementById("totps").children;
+		var totpObj = new TOTP();
+		for(var i = 0; i < totpsChildren.length; i++) {
+			var totpDOM = totpsChildren[i];
+			var sk = totpDOM.getAttribute('data-sk');
+			var label = totpDOM.getAttribute('data-label');
+			var totp = totpObj.getOTP(sk);
+			totpDOM.innerHTML = label + ': ' + totp;
+		}
+	}
+
+	function js_render_totps(){
+		// = check if decrypted data contain a javascript object
+			var decrypted_str = document.getElementById('txa').value;
+			try{
+				eval('var jsonObj = ' + decrypted_str + ';');
+			}catch(e){
+				var jsonObj = '';
+			}
+			if (typeof jsonObj !== 'object') return;
+
+		// = iterate through elements of this object and extract possible accounts keys & labels
+			var html_totp = '';
+			for(account in jsonObj) {
+				if (account.length == 32 && jsonObj[account]['account']!==undefined){
+					html_totp += "<a href='#' data-sk='"+jsonObj[account]['secret']+"' data-label='"+jsonObj[account]['account']+"'></a>";
+				}
+			}
+
+		// = activate 2FA generators
+			if (html_totp!=''){
+				document.getElementById('totps').innerHTML = html_totp;
+				document.getElementById('totps').style='display:block;';
+				document.getElementById('bt_save').style='display:none;';
+				document.getElementById('bt_change').style='display:none;';
+				document.getElementById('bt_edit').style='display:inline-block;';
+				document.getElementById('bt_regenerate').style='display:inline-block;';
+				document.getElementById('txa').className = '';
+				document.getElementById('txa').value = encrypted_data;
+				data_state = 'encrypted';
+				js_refresh_totps();
+			}
+	}
+
+	function js_2FA_edit(){
+		document.getElementById('bt_edit').style='display:none;';
+		document.getElementById('bt_regenerate').style='display:none;';
+		document.getElementById('bt_save').style='display:inline-block;';
+		document.getElementById('bt_change').style='display:inline-block;';
+		document.getElementById('txa').value = encrypted_data;
+		js_decrypt('1');
+	}
+
+	function js_2FA_regenerate(){
+		document.getElementById('totps').style = 'background:orange;';
+		js_refresh_totps();
+		setTimeout(function(){document.getElementById('totps').style = 'background:black;'},300);
+
+	}
+
+</script>
+
 </body>
 </html>

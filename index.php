@@ -20,7 +20,7 @@
  */ ?>
 <?php
 
-$version = '1.2';
+$version = '2019.03.09';
 
 // = get list of data files
 	$scan = scandir(dirname(__FILE__).'/data/');
@@ -77,7 +77,7 @@ $version = '1.2';
 	<?php } ?>
 	</div>
 
-	<p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - v<?= $version ?></a> (C) 2015-2019 GPL v2 license</p>
+	<p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - <?= $version ?></a> (C) 2015-2019 GPL v2 license</p>
 
 </body>
 </html>

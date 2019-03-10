@@ -8,7 +8,7 @@ body{
     background-color: #007998;
     background: linear-gradient(135deg, #007998 0%, #002233 100%) repeat scroll 0% 0% transparent;
 }
-* { border-radius: 5px;}
+* { border-radius: 5px;box-sizing: border-box; }
 
 input, textarea, select {font-size:1rem;}
 
@@ -17,9 +17,10 @@ input, textarea, select {font-size:1rem;}
 
 .tb_main{
 	margin:15px auto;
-	width:600px;
+	width:44rem;
+	max-width:95%;
 	border:2px #000 solid;
-        background-color: #000;
+    background-color: #000;
 }
 .tb_main td{
 	padding:0px;
@@ -30,13 +31,13 @@ input, textarea, select {font-size:1rem;}
 	padding:5px;
 	margin:3px;
 	background-color:#333;
-        color: #ccc;
-        font-weight:bold;
-        letter-spacing:1px;
-        border: 1px #666 solid;
-        border-left: 3px #666 solid;
-        border-right: 3px #666 solid;
-        outline:0;
+    color: #ccc;
+    font-weight:bold;
+    letter-spacing:1px;
+    border: 1px #666 solid;
+    border-left: 3px #666 solid;
+    border-right: 3px #666 solid;
+    outline:0;
 }
 .key:focus,
 .a_bt:focus,
@@ -47,17 +48,29 @@ input, textarea, select {font-size:1rem;}
         box-shadow: 0px 0px 3px #ccc;
         color:#fff;
 }
+
+#bt_edit, #bt_regenerate{color:orange;}
+
 #txa{
 	text-align:left;
-	width:42rem;
+	width:100%;
 	height:300px;
 	background-color:#333;
-        color:#666;
+    color:#666;
 	padding:5px;
 	margin:0px;
 	border:none;
 	line-height: 1.3rem;
 }
+
+#totps{display:block;width:100%;text-align:center;padding-bottom:0.2rem;transition:0.3s;}
+#totps a{display:inline-block;width:98%;margin:0.2rem;padding:0.2rem;
+	text-align:center;text-decoration:none;color:#333;background-color:#aaa;letter-spacing: 1px;}
+#totps a:hover{box-shadow:0px 0px 2px 1px #fff;}
+
+	@media (min-width: 600px) {
+		#totps a{width:48%;}
+	}
 
 .txa_decrypted{
     background-image:
