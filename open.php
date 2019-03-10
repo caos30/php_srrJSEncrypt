@@ -529,7 +529,7 @@ function setKey(){
         <td style='color:#fff;'>
             <div id="menu_encrypted">
                 <input type='password' id='key' value='' placeholder=" *** write your encryption key here *** " class="key"
-				 	onkeypress="if(getKeyCode(event)==13){js_decrypt();return false;}" />
+				 	onkeypress="if(getKeyCode(event)==13){js_decrypt();return false;}" autocomplete="off" />
                 <a href='#' class='a_bt' id='bt_decrypt' onclick='js_decrypt();'>Decrypt</a>
 				<a href='index.php' class='a_bt'>Menu</a>
             </div>
@@ -541,9 +541,9 @@ function setKey(){
 				<a href='#' class='a_bt' id='bt_regenerate' onclick='js_2FA_regenerate();' style='display:none;'>Regenerate</a>
             </div>
             <div id="menu_change_key" style="display:none;">
-                 New key: <input type='password' id='key1' value='' placeholder=" *** write your encryption key here *** " class="key" />
+                 New key: <input type='password' id='key1' value='' placeholder=" *** write your encryption key here *** " class="key" autocomplete="off" />
                 <br />
-                Confirm new key: <input type='password' id='key2' value='' placeholder=" *** write your encryption key here *** " class="key" />
+                Confirm new key: <input type='password' id='key2' value='' placeholder=" *** write your encryption key here *** " class="key" autocomplete="off" />
                 <br />
                 <a href='#' class='a_bt' id='bt_save_change' onclick='js_save_change();'>Save with new key</a>
                 <a href='#' class='a_bt' id='bt_close' onclick='js_cancel_change_key();'>Cancel</a>
@@ -555,7 +555,7 @@ function setKey(){
 			<div id='totps' style='display:none;'>
 				<a href="#" data-sk="GHMXWADIUSUTXXAG" data-label="IM">IM: <b>123456</b></a>
 			</div>
-            <textarea id='txa' name='txa'><?php
+            <textarea id='txa' name='txa' autocomplete="off"><?php
 
                     $ret="";
                     $fp = fopen($file_path,"r");
