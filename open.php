@@ -20,7 +20,7 @@
  */
 
 // = set config
-	$version = '2019.03.09';
+	$version = '2019.03.15';
 	$msg="";
 
 // = data file
@@ -71,7 +71,7 @@
     <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-<link href="images/estilos.css" rel="stylesheet" type="text/css" />
+<link href="images/estilos_2019-03-15.css" rel="stylesheet" type="text/css" />
 
 <script language="JavaScript" type="text/javascript" >
 /* <![CDATA[ */
@@ -553,7 +553,7 @@ function setKey(){
     <tr>
         <td>
 			<div id='totps' style='display:none;'>
-				<a href="#" data-sk="GHMXWADIUSUTXXAG" data-label="IM">IM: <b>123456</b></a>
+				<!-- <a href="#" data-sk="GHMXWADIUSUTXXAG" data-label="IM">IM: <b>123456</b></a> -->
 			</div>
             <textarea id='txa' name='txa' autocomplete="off"><?php
 
@@ -742,6 +742,7 @@ function js_save_change(){
 			var label = totpDOM.getAttribute('data-label');
 			var totp = totpObj.getOTP(sk);
 			totpDOM.innerHTML = label + ': ' + totp;
+			totpDOM.setAttribute('data-totp',totp);
 		}
 	}
 
@@ -757,9 +758,13 @@ function js_save_change(){
 
 		// = iterate through elements of this object and extract possible accounts keys & labels
 			var html_totp = '';
+			var ii = 0;
 			for(account in jsonObj) {
+				ii++;
 				if (account.length == 32 && jsonObj[account]['account']!==undefined){
-					html_totp += "<a href='#' data-sk='"+jsonObj[account]['secret']+"' data-label='"+jsonObj[account]['account']+"'></a>";
+					html_totp += "<a href='#' id='totp-"+ii+"' data-sk='"+jsonObj[account]['secret']
+								+"' data-label='"+jsonObj[account]['account']
+								+"' data-totp='' onclick=\"js_copy_totp('"+ii+"');return false;\"></a>";
 				}
 			}
 
@@ -792,6 +797,30 @@ function js_save_change(){
 		js_refresh_totps();
 		setTimeout(function(){document.getElementById('totps').style = 'background:black;'},300);
 
+	}
+	function js_copy_totp(id){
+		document.getElementById('totp-'+id).style = 'background:orange;';
+		var text = document.getElementById('totp-'+id).getAttribute('data-totp');
+		js_text2clipboard(text);
+		setTimeout(function(){document.getElementById('totp-'+id).style.backgroundColor = ''},300);
+	}
+
+	function js_text2clipboard(text) {
+	  // Create the textarea input to hold our text.
+	  const element = document.createElement('textarea');
+	  element.value = text;
+	  element.style.position = 'absolute';
+	  element.style.top = '-1000px';
+	  element.style.left = '-1000px';
+	  // Add it to the document so that it can be focused.
+	  document.body.appendChild(element);
+	  // Focus on the element so that it can be copied.
+	  element.focus();
+	  element.setSelectionRange(0, element.value.length);
+	  // Execute the copy command.
+	  document.execCommand('copy');
+	  // Remove the element to keep the document clear.
+	  document.body.removeChild(element);
 	}
 
 </script>

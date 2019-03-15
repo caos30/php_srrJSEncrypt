@@ -20,7 +20,7 @@
  */ ?>
 <?php
 
-$version = '2019.03.09';
+$version = '2019.03.15';
 
 // = get list of data files
 	$scan = scandir(dirname(__FILE__).'/data/');
@@ -60,7 +60,7 @@ $version = '2019.03.09';
     <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-	<link href="images/estilos.css" rel="stylesheet" type="text/css" />
+	<link href="images/estilos_2019-03-15.css" rel="stylesheet" type="text/css" />
 
 	<style>
 		.file_list{text-align:center;margin:2rem;}

@@ -64,7 +64,7 @@ input, textarea, select {font-size:1rem;}
 }
 
 #totps{display:block;width:100%;text-align:center;padding-bottom:0.2rem;transition:0.3s;}
-#totps a{display:inline-block;width:98%;margin:0.2rem;padding:0.2rem;
+#totps a{display:inline-block;width:98%;margin:0.2rem;padding:0.2rem;font-size:1.5rem;transition:0.3s;
 	text-align:center;text-decoration:none;color:#333;background-color:#aaa;letter-spacing: 1px;}
 #totps a:hover{box-shadow:0px 0px 2px 1px #fff;}
 
