@@ -17,7 +17,7 @@ input, textarea, select {font-size:1rem;}
 
 .tb_main{
 	margin:15px auto;
-	width:44rem;
+	width:99%;
 	max-width:95%;
 	border:2px #000 solid;
     background-color: #000;

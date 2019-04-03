@@ -48,7 +48,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns='http://www.w3.org/1999/xhtml'><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title> JS-ENCRYPT </title>
+<title><?= $file!='' ? $file.' :: ' : '' ?> JS-ENCRYPT </title>
 <meta name="title" content="JS-ENCRYPT" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -71,7 +71,7 @@
     <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-<link href="images/estilos_2019-03-15.css" rel="stylesheet" type="text/css" />
+<link href="images/estilos_2019-04-03.css" rel="stylesheet" type="text/css" />
 
 <script language="JavaScript" type="text/javascript" >
 /* <![CDATA[ */

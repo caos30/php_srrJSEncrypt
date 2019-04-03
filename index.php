@@ -60,7 +60,7 @@ $version = '2019.03.15';
     <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-	<link href="images/estilos_2019-03-15.css" rel="stylesheet" type="text/css" />
+	<link href="images/estilos_2019-04-03.css" rel="stylesheet" type="text/css" />
 
 	<style>
 		.file_list{text-align:center;margin:2rem;}
