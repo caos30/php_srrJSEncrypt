@@ -2,7 +2,7 @@
 
 Simple way (unique PHP file) to store your encrypted data in a single text file, not using database at all and encrypting from the client side using javascript AES algorithms. It also generate 6-digit TOTp codes (see below).
 
-Current version: 2019.03.09
+Current version: 2020.06.15 - [Changelog](/CHANGELOG.TXT)
 
 ## Screenshots
 
@@ -17,6 +17,10 @@ Current version: 2019.03.09
 
 Copy this project in any PHP 5+ server and call it from browser. Default encryption key "1234". Each time you decrypt, you can change key and re-encrypt and save.
 You must remember that the encryption key is not saved ANYWHERE, so you must take care by yourself for not forget it!
+
+## Protection with a md5 password 
+
+To access to the index.php menu file of the interface you will submit a password in the login.php page. So, you must previously embbed in that file the md5 hash of your preferred password, inthe first lines of that PHP file.
 
 ## Data files
 

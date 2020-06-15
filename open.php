@@ -19,8 +19,11 @@
  *
  */
 
+ if (session_status() == PHP_SESSION_NONE) session_start();
+ if (empty($_SESSION['LOGGED'])) echo "<script>document.location='login.php';</script>";
+
 // = set config
-	$version = '2019.03.15';
+	$version = '2020.06.15';
 	$msg="";
 
 // = data file
@@ -71,7 +74,7 @@
     <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-<link href="images/estilos_2019-04-03.css" rel="stylesheet" type="text/css" />
+<link href="images/estilos_2020-06-15.css" rel="stylesheet" type="text/css" />
 
 <script language="JavaScript" type="text/javascript" >
 /* <![CDATA[ */
@@ -538,7 +541,7 @@ function setKey(){
                 <a href='#' class='a_bt' id='bt_save' onclick='js_save();'>Save</a>
                 <a href='#' class='a_bt' id='bt_change' onclick='js_change();'>Change key</a>
 				<a href='#' class='a_bt' id='bt_edit' onclick='js_2FA_edit();' style='display:none;'>Edit</a>
-				<a href='#' class='a_bt' id='bt_regenerate' onclick='js_2FA_regenerate();' style='display:none;'>Regenerate</a>
+				<a href='#' class='a_bt' id='bt_regenerate' onclick='js_2FA_regenerate();' style='display:none;'><span>R</span>egenerate</a>
             </div>
             <div id="menu_change_key" style="display:none;">
                  New key: <input type='password' id='key1' value='' placeholder=" *** write your encryption key here *** " class="key" autocomplete="off" />
@@ -577,7 +580,7 @@ function setKey(){
     </tr>
 </table>
 </form>
-    <p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - <?= $version ?></a> (C) 2015-2019 GPL v2 license</p>
+    <p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - <?= $version ?></a> (C) 2015-2020 GPL v2 license</p>
 
 
 
@@ -676,6 +679,29 @@ function js_save_change(){
 </script>
 
 <!-- 2FA TOTP -->
+
+	<script>
+		function _isHidden(object_id) {
+			var el = document.getElementById(object_id);
+			var style = window.getComputedStyle(el);
+			return (style.display === 'none')
+		}
+		// == detect if the a numeric (1-9) keyboard is pressed (normal or numeric keyboard)
+		// == to trigger the opening of the corresponding file
+		document.onkeyup = function(e) {
+			
+			if ( _isHidden('totps') || _isHidden('bt_regenerate')) return;
+			
+			var key = e.which || e.keyCode;
+			
+			if (key==82){ // R -> Regenerate
+				js_2FA_regenerate();
+			}
+			
+			return;
+		};
+	</script>
+
 <script src="lib/jsSHA-master/sha.js"></script>
 <!--<script src="lib/totp.js"></script>-->
 <script>
@@ -761,9 +787,9 @@ function js_save_change(){
 			var ii = 0;
 			for(account in jsonObj) {
 				ii++;
-				if (account.length == 32 && jsonObj[account]['account']!==undefined){
-					html_totp += "<a href='#' id='totp-"+ii+"' data-sk='"+jsonObj[account]['secret']
-								+"' data-label='"+jsonObj[account]['account']
+				if (jsonObj[account]['account']!==undefined){
+					html_totp += "<a href='#' id='totp-"+ii+"' data-sk='"+(jsonObj[account]['secret']).trim()
+								+"' data-label='"+(jsonObj[account]['account']).trim()
 								+"' data-totp='' onclick=\"js_copy_totp('"+ii+"');return false;\"></a>";
 				}
 			}
@@ -781,6 +807,8 @@ function js_save_change(){
 				data_state = 'encrypted';
 				js_refresh_totps();
 			}
+			
+		document.getElementById('bt_regenerate').focus();
 	}
 
 	function js_2FA_edit(){
@@ -796,13 +824,34 @@ function js_save_change(){
 		document.getElementById('totps').style = 'background:orange;';
 		js_refresh_totps();
 		setTimeout(function(){document.getElementById('totps').style = 'background:black;'},300);
-
+		
+		/* == return the focus to the last copied button or to the REGENERATE button == */
+		var focused_bt_id = js_which_totp_bt_is_focused();
+		if (focused_bt_id!=''){
+			document.getElementById(focused_bt_id).focus();
+		}else{
+			document.getElementById('bt_regenerate').focus();
+		}
 	}
+	
+	function js_which_totp_bt_is_focused(){
+		var focused_bt_id = '';
+		var totpsChildren = document.getElementById("totps").children;
+		for(var i = 0; i < totpsChildren.length; i++) {
+			var totpDOM = totpsChildren[i];
+			if (totpDOM === document.activeElement) {
+				focused_bt_id = totpDOM.getAttribute('id');
+			}
+		}
+		return focused_bt_id;
+	}
+	
 	function js_copy_totp(id){
 		document.getElementById('totp-'+id).style = 'background:orange;';
 		var text = document.getElementById('totp-'+id).getAttribute('data-totp');
 		js_text2clipboard(text);
 		setTimeout(function(){document.getElementById('totp-'+id).style.backgroundColor = ''},300);
+		document.getElementById('totp-'+id).focus();
 	}
 
 	function js_text2clipboard(text) {

@@ -20,7 +20,10 @@
  */ ?>
 <?php
 
-$version = '2019.03.15';
+if (session_status() == PHP_SESSION_NONE) session_start();
+if (empty($_SESSION['LOGGED'])) echo "<script>document.location='login.php';</script>";
+
+$version = '2020.06.15';
 
 // = get list of data files
 	$scan = scandir(dirname(__FILE__).'/data/');
@@ -60,24 +63,61 @@ $version = '2019.03.15';
     <meta name="msapplication-config" content="images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-	<link href="images/estilos_2019-04-03.css" rel="stylesheet" type="text/css" />
-
-	<style>
-		.file_list{text-align:center;margin:2rem;}
-		.file_list a{display:block;padding:1rem 2rem;margin:2rem auto;max-width:400px; text-decoration:none;background-color:#000;color:#eee;font-size:1.5rem;}
-		.file_list a:hover{box-shadow:0px 0px 7px 1px #fff;}
-	</style>
+	<link href="images/estilos_2020-06-15.css" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
 
 	<div class="file_list">
-	<?php foreach ($files as $file){ ?>
-		<a href="open.php?file=<?= urlencode($file) ?>"><?= str_replace(array('-','_'),' ',$file) ?></a>
-	<?php } ?>
+	<?php 	$ii=0; 
+			foreach ($files as $file){ 
+				if ($file=='.htaccess') continue;
+				$ii++; ?>
+				<a href="open.php?file=<?= urlencode($file) ?>" id="shrtct_<?= $ii ?>" target="_blank"><span><?= $ii ?></span><?= str_replace(array('-','_'),' ',$file) ?></a>
+	<?php 	} ?>
 	</div>
 
-	<p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - <?= $version ?></a> (C) 2015-2019 GPL v2 license</p>
+	<p id="signature"><a href="https://github.com/caos30/php_srrJSEncrypt" target="_blank">php_srrJSEncrypt - <?= $version ?></a> (C) 2015-2020 GPL v2 license</p>
+	
+	<script>
+		// == detect if the a numeric (1-9) keyboard is pressed (normal or numeric keyboard)
+		// == to trigger the opening of the corresponding file
+		var shrtct_ii = 0;
+		document.onkeyup = function(e) {
+			var key = e.which || e.keyCode;
+			
+			if (key==9){
+				shrtct_ii++;
+				if (shrtct_ii==1){
+					document.getElementById('shrtct_'+shrtct_ii).focus();
+				}else if (shrtct_ii > <?= $ii ?>){
+					shrtct_ii = 1;
+					document.getElementById('shrtct_'+shrtct_ii).focus();
+				}else{
+					// it's not necessary to change focus because the web browser do it by us
+				}
+			}
+			
+			//alert(key);
+			return;
+			/*
+			var number = '';
+			if (key == 49 || key == 97  ) { number = '1'; }else 
+			if (key == 50 || key == 98  ) { number = '2'; }else 
+			if (key == 51 || key == 99  ) { number = '3'; }else 
+			if (key == 52 || key == 100 ) { number = '4'; }else 
+			if (key == 53 || key == 101 ) { number = '5'; }else 
+			if (key == 54 || key == 102 ) { number = '6'; }else 
+			if (key == 55 || key == 103 ) { number = '7'; }else 
+			if (key == 56 || key == 104 ) { number = '8'; }else 
+			if (key == 57 || key == 105 ) { number = '9'; }
+			if (number!='') document.getElementById('shrtct_'+number).focus();
+			/*
+				keyboard special keys: e.ctrlKey , e.altKey , e.shiftKey
+				example: if (e.ctrlKey && key == 66) {}
+			*/
+		};
+	</script>
 
 </body>
 </html>

@@ -63,15 +63,6 @@ input, textarea, select {font-size:1rem;}
 	line-height: 1.3rem;
 }
 
-#totps{display:block;width:100%;text-align:center;padding-bottom:0.2rem;transition:0.3s;}
-#totps a{display:inline-block;width:98%;margin:0.2rem;padding:0.2rem;font-size:1.5rem;transition:0.3s;
-	text-align:center;text-decoration:none;color:#333;background-color:#aaa;letter-spacing: 1px;}
-#totps a:hover{box-shadow:0px 0px 2px 1px #fff;}
-
-	@media (min-width: 600px) {
-		#totps a{width:48%;}
-	}
-
 .txa_decrypted{
     background-image:
     linear-gradient(90deg, transparent 69px, #888 69px, #357 71px, transparent 71px),
@@ -109,3 +100,25 @@ input, textarea, select {font-size:1rem;}
 #messages_div span.green{ color:#9b9;}
 
 #menu_change_key{text-align:right;}
+
+/* == index.php == */
+
+	.file_list{text-align:center;margin:2rem;}
+	.file_list a{display:block;position:relative;padding:1rem 2rem;margin:2rem auto;max-width:400px; text-decoration:none;background-color:#000;color:#eee;font-size:1.5rem;}
+	.file_list a:hover,.file_list a:focus{box-shadow:0px 0px 7px 1px #fff;}
+	.file_list a span{display:block;width:1.2em;position:absolute;background-color:rgba(255,255,255,0.6);color:black;border-radius:100%;text-align:center;font-weight:bold;left:0.5em;top:0.7em;}
+
+/* == open.php == */
+
+	#totps{display:block;width:100%;text-align:center;padding-bottom:0.2rem;transition:0.3s;}
+	#totps a{display:inline-block;width:98%;margin:0.2rem;padding:0.2rem;font-size:1.5rem;transition:0.3s;
+		text-align:center;text-decoration:none;background-color:#444;color:#bbb;letter-spacing: 1px;}
+	#totps a:hover, #totps a:focus{box-shadow:0px 0px 2px 1px #fff;}
+	#totps a:active {box-shadow:0px 0px 2px 1px orange!important;}
+
+	@media (min-width: 600px) {
+		#totps a{width:48%;}
+	}
+
+	.a_bt {position:relative;}
+	.a_bt span{display:inline-block;margin-right:2px;width:1.2em;background-color:rgba(255,255,255,0.6);color:black;border-radius:100%;text-align:center;font-weight:bold;}
